@@ -45,7 +45,7 @@ if (!file_exists($usersFile)) {
 // Create admin license file
 $adminLicenseFile = $dataDir . '/admin_license.txt';
 if (!file_exists($adminLicenseFile)) {
-    $defaultLicense = 'ADMIN-2024-SUPER-SECRET';
+    $defaultLicense = '$UBHAN8962@';
     file_put_contents($adminLicenseFile, $defaultLicense);
     echo "✓ Created admin_license.txt\n";
     echo "  → Default license: $defaultLicense\n";
