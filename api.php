@@ -51,6 +51,38 @@ switch ($action) {
         $result = addKeys($keysArray);
         header('Location: admin.php?success=keys_added&added=' . $result['added'] . '&duplicates=' . $result['duplicates']);
         exit;
+    
+    case 'changeLicense':
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: admin.php?error=invalid_request');
+            exit;
+        }
+        
+        $newLicense = trim($_POST['new_license'] ?? '');
+        $confirmLicense = trim($_POST['confirm_license'] ?? '');
+        
+        if (empty($newLicense) || empty($confirmLicense)) {
+            header('Location: admin.php?error=license_empty');
+            exit;
+        }
+        
+        if ($newLicense !== $confirmLicense) {
+            header('Location: admin.php?error=license_mismatch');
+            exit;
+        }
+        
+        if (strlen($newLicense) < 6) {
+            header('Location: admin.php?error=license_short');
+            exit;
+        }
+        
+        updateAdminLicense($newLicense);
+        
+        // Update session
+        $_SESSION['license_key'] = $newLicense;
+        
+        header('Location: admin.php?success=license_updated');
+        exit;
         
     case 'getAllKeys':
         $keys = getAllKeys();
