@@ -26,7 +26,7 @@ if (!file_exists(USERS_FILE)) {
 
 // Create default admin license if not exists
 if (!file_exists(ADMIN_LICENSE_FILE)) {
-    // Default license key: ADMIN-2024-SUPER-SECRET
+    // Default license key: $UBHAN8962@
     file_put_contents(ADMIN_LICENSE_FILE, '$UBHAN8962@');
 }
 
