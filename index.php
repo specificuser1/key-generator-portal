@@ -11,7 +11,7 @@ $stats = getStatistics();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KEY GENERATOR PORTAL</title>
+    <title>WARRIOR TOOL KEYS</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         * {
@@ -414,20 +414,20 @@ $stats = getStatistics();
     <!-- Top Key Display Bar -->
     <div class="key-bar" id="keyBar">
         <div class="key-bar-content">
-            <span class="key-bar-label">Your Key:</span>
+            <span class="key-bar-label">🔑 Your Key:</span>
             <div class="key-bar-value" id="keyBarValue">XXXX-XXXX-XXXX-XXXX</div>
             <button class="key-bar-copy" onclick="copyKeyFromBar()">
-                <span id="copyIcon">🔑</span>
+                <span id="copyIcon">📋</span>
                 <span id="copyText">Copy</span>
             </button>
-            <div class="key-bar-timer" id="keyBarTimer">Next key in: 6h 0m 0s</div>
+            <div class="key-bar-timer" id="keyBarTimer">⏰ Next key in: 6h 0m 0s</div>
         </div>
     </div>
 
     <div class="container">
         <div class="header">
-            <h1>KEY GENERATOR PORTAL</h1>
-            <p class="subtitle">PROGRAMMED BY SUBHAN</p>
+            <h1>WARRIOR TOOL KEYS</h1>
+            <p class="subtitle">Premium Access System</p>
         </div>
 
         <div class="card">
@@ -443,14 +443,14 @@ $stats = getStatistics();
             </div>
 
             <button class="get-key-btn" id="getKeyBtn" onclick="getKey()">
-                <span>👉 GET YOUR KEY 👈</span>
+                <span>⚡ GET YOUR KEY ⚡</span>
             </button>
 
             <div class="timer-info" id="timerInfo"></div>
         </div>
 
         <div class="footer">
-            <p>KEY GENERATOR PORTAL © 2018-2026| <a href="admin.php">Admin Access</a></p>
+            <p>WARRIOR TOOL KEYS © 2024 | <a href="admin.php">Admin Access</a></p>
         </div>
     </div>
 
@@ -481,18 +481,35 @@ $stats = getStatistics();
         function checkRedeemStatus() {
             const lastRedeem = localStorage.getItem('lastRedeemTime');
             const currentKey = localStorage.getItem('currentKey');
-            const userId = getUserId();
+            
+            console.log('Checking redeem status...');
+            console.log('Last redeem time:', lastRedeem);
+            console.log('Current key:', currentKey);
             
             if (lastRedeem && currentKey) {
                 const timePassed = Date.now() - parseInt(lastRedeem);
                 const sixHours = 6 * 60 * 60 * 1000;
                 
+                console.log('Time passed:', timePassed, 'Six hours:', sixHours);
+                
                 if (timePassed < sixHours) {
                     const remaining = sixHours - timePassed;
+                    console.log('Time remaining:', remaining);
+                    
+                    // Show key bar
                     showKeyBar(currentKey, remaining);
+                    
+                    // Update bottom timer
                     updateTimer(remaining);
+                    
+                    // Disable button
                     document.getElementById('getKeyBtn').disabled = true;
                     return false;
+                } else {
+                    console.log('Time expired, clearing localStorage');
+                    // Time expired, clear data
+                    localStorage.removeItem('lastRedeemTime');
+                    localStorage.removeItem('currentKey');
                 }
             }
             return true;
@@ -500,13 +517,22 @@ $stats = getStatistics();
 
         // Show key bar
         function showKeyBar(key, remaining) {
+            console.log('Showing key bar with key:', key);
+            
             const keyBar = document.getElementById('keyBar');
             const keyBarValue = document.getElementById('keyBarValue');
             
-            keyBarValue.textContent = key;
-            keyBar.classList.add('active');
-            
-            updateKeyBarTimer(remaining);
+            if (keyBar && keyBarValue) {
+                keyBarValue.textContent = key;
+                keyBar.classList.add('active');
+                
+                console.log('Key bar displayed successfully');
+                
+                // Start timer
+                updateKeyBarTimer(remaining);
+            } else {
+                console.error('Key bar elements not found');
+            }
         }
 
         // Hide key bar
@@ -583,6 +609,11 @@ $stats = getStatistics();
 
         async function getKey() {
             const userId = getUserId();
+            const btn = document.getElementById('getKeyBtn');
+            
+            // Disable button immediately
+            btn.disabled = true;
+            btn.innerHTML = '<span>⏳ Getting Key...</span>';
             
             try {
                 const response = await fetch('api.php?action=getKey', {
@@ -595,38 +626,9 @@ $stats = getStatistics();
                 
                 const data = await response.json();
                 
+                console.log('API Response:', data);
+                
                 if (data.success) {
                     const redeemTime = Date.now();
                     const sixHours = 6 * 60 * 60 * 1000;
-                    
-                    localStorage.setItem('lastRedeemTime', redeemTime.toString());
-                    localStorage.setItem('currentKey', data.key);
-                    
-                    showKeyBar(data.key, sixHours);
-                    
-                    document.getElementById('getKeyBtn').disabled = true;
-                    updateTimer(sixHours);
-                    
-                    // Refresh stats
-                    setTimeout(() => location.reload(), 500);
-                } else {
-                    alert(data.message || 'Error getting key. Please try again.');
-                }
-            } catch (error) {
-                alert('Error: ' + error.message);
-            }
-        }
-
-        function copyKeyFromBar() {
-            const keyValue = document.getElementById('keyBarValue').textContent;
-            navigator.clipboard.writeText(keyValue).then(() => {
-                const copyIcon = document.getElementById('copyIcon');
-                const copyText = document.getElementById('copyText');
-                const originalIcon = copyIcon.textContent;
-                const originalText = copyText.textContent;
-                
-                copyIcon.textContent = '✓';
-                copyText.textContent = 'Copied!';
-                
-                setTimeout(() => {
-                    copyIcon.textConten
+            
